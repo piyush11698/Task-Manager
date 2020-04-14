@@ -5,7 +5,7 @@ const route = Router()
 
 route.get('/', async(req,res) => {
     const tasks = await Tasks.findAll()
-    res.send(tasks)
+    res.render('index',{tasks})
 })
 
 route.get('/:id', async(req,res) => {
@@ -27,26 +27,12 @@ route.get('/:id', async(req,res) => {
 })
 
 route.post('/', async(req,res) => {
-    if(typeof req.body.Title !== 'string'){
+    if(typeof req.body.title !== 'string'){
         return res.status(400).send({error: 'Title must be provided'})
     }
 
-    if(typeof req.body.Description !== 'string'){
+    if(typeof req.body.description !== 'string'){
         return res.status(400).send({error: 'Description must be provided'})
-    }
-
-    if(req.body.Status === 'complete'){
-        req.body.Status = 'complete'
-    } else{
-        req.body.Status = 'incomplete'
-    }
-
-    if(req.body.Priority === 'high'){
-        req.body.Priority = 'high'
-    } else if(req.body.Priority === 'low'){
-        req.body.Priority = 'low'
-    } else{
-        req.body.Priority = 'medium'
     }
 
     // if(isNaN(Date.parse(req.body.DueDate))){
@@ -54,14 +40,18 @@ route.post('/', async(req,res) => {
     // }
 
     const newTask = await Tasks.create({
-        Title: req.body.Title,
-        Description: req.body.Description,
-        DueDate: req.body.DueDate,
-        Status: req.body.Status,
-        Priority: req.body.Priority
+        Title: req.body.title,
+        Description: req.body.description,
+        DueDate: req.body.duedate,
     })
 
-    res.status(201).send( newTask)
+    if(req.body.status === 'on'){
+        newTask.Status = 'Complete' 
+    }
+
+
+    await newTask.save()
+    res.redirect('/todos')
 })
 
 

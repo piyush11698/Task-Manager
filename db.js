@@ -20,7 +20,7 @@ const Tasks = db.define('todo' , {
     DueDate: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: 2020-04-16
+        defaultValue: '2020-04-16'
     },
     Status: {
         type: Sequelize.STRING,
