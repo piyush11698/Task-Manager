@@ -4,7 +4,11 @@ const {Tasks} = require('../db')
 const route = Router()
 
 route.get('/', async(req,res) => {
-    const tasks = await Tasks.findAll()
+    const tasks = await Tasks.findAll({
+        order:[
+            ['DueDate','ASC']
+        ]
+    })
     res.render('index',{tasks})
 })
 
@@ -23,7 +27,7 @@ route.get('/:id', async(req,res) => {
         })
     }
 
-    res.send(task)
+    res.render('EditTask',{task})
 })
 
 route.post('/', async(req,res) => {
@@ -43,6 +47,7 @@ route.post('/', async(req,res) => {
         Title: req.body.title,
         Description: req.body.description,
         DueDate: req.body.duedate,
+        Priority: req.body.priority
     })
 
     if(req.body.status === 'on'){
