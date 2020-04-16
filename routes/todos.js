@@ -43,7 +43,7 @@ route.post('/', async(req,res) => {
     //     return res.status(400).send({error:'Enter valid date'})
     // }
 
-    const newTask = await Tasks.create({
+    let newTask = await Tasks.create({
         Title: req.body.title,
         Description: req.body.description,
         DueDate: req.body.duedate,
@@ -59,30 +59,31 @@ route.post('/', async(req,res) => {
     res.redirect('/todos')
 })
 
-
 route.patch('/:id', async(req,res) => {
-    // if(isNaN(Number(req.params.id))){
-    //     return res.status(400).send({
-    //         error: 'Task id must be an integer'
-    //     })
-    // }
-    const todobyId = await Tasks.findOne({ where: {id : req.params.id}}) 
-
-    todobyId.Title = req.body.Title
-    todobyId.Description = req.body.Description
-    todobyId.DueDate = req.body.DueDate
-    todobyId.Status = req.body.Status
-    todobyId.Priority = req.body.Priority
-
-    const updatedValue = await todobyId.save()
-
-    res.send(updatedValue)
-
-    // if(!updatedTask){
-    //     return res.status(404).send({
-    //         error: 'No Task found with id = ' + req.params.id
-    //     })
-    // }
+    let todobyId = await Tasks.findByPk(req.params.id) 
+        todobyId.Title = req.body.title
+        todobyId.Description = req.body.description
+        todobyId.DueDate = req.body.duedate
+        todobyId.Status = req.body.status
+        todobyId.Priority = req.body.priority
+    await todobyId.save()
+    res.redirect('/todos')
 })
+
+
+// route.get('/:id/notes', async(req,res) => {
+//     const tasknotes = await Tasks.findByPk(req.params.id)
+//     res.render('index',{tasknotes})
+// })
+
+// route.post('/:id/notes', async(req,res) => {
+//     const taskNotes = await Tasks.create({
+//         Notes:req.body.Notes
+//     })
+
+//     await taskNotes.save()
+//     res.redirect('/todos')
+// })
+
 
 module.exports = route

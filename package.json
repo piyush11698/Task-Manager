@@ -9,8 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "ejs": "^3.0.2",
+    "ember-truth-helpers": "^2.1.0",
     "express": "^4.17.1",
     "hbs": "^4.1.1",
+    "method-override": "^3.0.0",
     "sequelize": "^5.21.6",
     "sqlite3": "^4.1.1"
   }
