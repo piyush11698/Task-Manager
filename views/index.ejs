@@ -34,9 +34,13 @@
                         <input type="date" class="form-control" id="duedate" name="duedate">
                     </div>
 
-                    <div class="form-group form-check">
-                        <input type="checkbox" class="form-check-input" id="status" name="status">
-                        <label class="form-check-label" for="status">Complete/Incomplete</label>
+                    <div class="js-form-message form-group mb-3 ml-3">
+                        <label class="mr-4">
+                            <input type="radio" class="form-check-input" name="status" value="Complete">Complete
+                        </label>
+                        <label>
+                            <input type="radio" class="form-check-input" name="status" value="incomplete">Incomplete
+                        </label>
                     </div>
 
                      <div class="js-form-message form-group mb-3 ml-3">
@@ -57,6 +61,18 @@
                 </form>
                 <br>
                 <hr>
+                <div class="container mt-2">
+                    <form class="d-flex d-flex-row" action="/todos?_method=GET" method="POST">
+                        <select class="custom-select" name="filters">
+                          <option selected>Select Filters</option>
+                          <option value="priority">High to Low Priority</option>
+                          <option value="dateDesc">Recent Tasks</option>
+                          <option value="dateAsc">Older Tasks</option>
+                          <option value="status">Status Wise</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-primary mb-2 ml-4">Apply</button>
+                      </form>
+                    </div>
                 <br>
                 <h5 class="display-4 mb-4"><u>List Of Tasks</u></h5>
                 <ul class="list-group">
@@ -69,16 +85,29 @@
                             <div class="collapsing" id="todo<%=todo.id%>">
                                 <div class="card card-body" >
                                     <li><%=todo.Description%></li>
-                                    <li><%=todo.DueDate%></li>
+                                    <li><%=todo.DueDate.toLocaleDateString()%></li>
                                     <li><%=todo.Status%></li>
                                     <li><%=todo.Priority%></li>
-                                    <!-- <li><%=todo.Notes%></li> -->
-                                    <a  href="/todos/<%=todo.id%>" class="btn btn-primary" id="edit">Edit</a>
-                                <!-- <form method="POST" action="/todos/<%=todo.id%>/notes">
-                                    <input type="textarea" id="notes" name="notes"><button>Add Notes</button>
-                                </form> -->
+                                    
+                                    <a  href="/todos/<%=todo.id%>" class="btn btn-primary mb-2" id="edit">Edit</a>
+
+                                    <a  href="/todos/<%=todo.id%>/notes" class="btn btn-primary" id="edit">Notes</a>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header text-dark">
+                                        Notes
+                                    </div>
+                                    <div class="card-body">
+                                        <form action="/todos/<%=todo.id%>/notes" method="post">
+                                            <div class="form-group">
+                                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="4" name="description"></textarea>
+                                            </div>
+                                            <button type="submit" class="btn btn-outline-primary">Add Notes</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
+
                         <% }); %>
                     </div>
                 </ul>

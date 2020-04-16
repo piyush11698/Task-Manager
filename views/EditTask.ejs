@@ -15,7 +15,7 @@
         <div class="row mt-4">
             <div class="col-md-6 offset-md-3">
                  <h4 class="display-4 mb-4"><u>Edit Task</u></h4>
-                <form action="/<%=task.id%>?_method=PATCH" method="POST" class="border border-dark p-4">
+                 <form action="/todos/<%=task.id%>?_method=PATCH" method="POST" class="border border-dark p-4"> 
 
                     <div class="form-group">
                         <label for="title">Title</label>
@@ -35,18 +35,26 @@
                         <input type="text" class="form-control" id="duedate" name="duedate" value="<%=task.DueDate.toLocaleDateString()%>" >
                     </div>
                     
-                    <% if (task.Status=="Complete"){%>    
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="status" name="status" value="Complete" checked>
-                            <label class="form-check-label" for="status">Complete / Incomplete</label>
+                    <% if (task.Status=="Complete"){%>  
+                        <div class="js-form-message form-group mb-3 ml-3">
+                            <label class="mr-4">
+                                <input type="radio" class="form-check-input" name="status" value="Complete" checked>Complete
+                            </label>
+                            <label>
+                                <input type="radio" class="form-check-input" name="status" value="incomplete" >Incomplete
+                            </label>
                         </div>
-                    <%}%>
+                        <%}%>
 
-                    <% if (task.Status=="incomplete"){%>    
-                        <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="status" name="status" value="incomplete">
-                            <label class="form-check-label" for="status">Complete / Incomplete</label>
-                        </div>
+                    <% if (task.Status=="incomplete"){%>  
+                    <div class="js-form-message form-group mb-3 ml-3">
+                        <label class="mr-4">
+                            <input type="radio" class="form-check-input" name="status" value="Complete">Complete
+                        </label>
+                        <label>
+                            <input type="radio" class="form-check-input" name="status" value="incomplete" checked>Incomplete
+                        </label>
+                    </div>
                     <%}%>
 
                     <% if (task.Priority=="High"){%>
@@ -92,7 +100,7 @@
                         <%}%>
                     <br>
 
-                    <button type="submit" class="btn btn-primary">Edit and Save</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
 
                 </form>
             </div>

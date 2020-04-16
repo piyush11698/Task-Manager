@@ -19,21 +19,33 @@ const Tasks = db.define('todo' , {
     },
     DueDate: {
         type: Sequelize.DATE,
-        allowNull: false,
-        defaultValue: '2020-04-16'
+        allowNull: false
     },
     Status: {
         type: Sequelize.STRING,
-        allowNull: false,
         defaultValue: 'incomplete'
     },
     Priority: {
         type: Sequelize.STRING(10),
-        allowNull: false,
         defaultValue: 'medium'
     }
 })
 
+const Notes = db.define('note',{
+    id: {
+        type : Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement : true
+    },
+    taskId : {
+        type: Sequelize.INTEGER,
+        allowNull : false
+    },
+    description : {
+        type : Sequelize.STRING(400),
+    }
+})
+
 module.exports = {
-    db,Tasks
+    db,Tasks,Notes
 }

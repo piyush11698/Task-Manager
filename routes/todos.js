@@ -1,16 +1,55 @@
 const {Router} = require('express')
-const {Tasks} = require('../db')
+const {Tasks,Notes} = require('../db')
+const { Op } = require('sequelize')
+
 
 const route = Router()
 
-route.get('/', async(req,res) => {
-    const tasks = await Tasks.findAll({
-        order:[
-            ['DueDate','ASC']
-        ]
-    })
-    res.render('index',{tasks})
-})
+route.get('/', async(req,res)=>{
+    let todos;
+
+   // filter by date in ascending
+   if(req.body.filters=="dateAsc"){
+   todos = await Tasks.findAll({  
+    order: [
+              ['DueDate','ASC'],
+       ]
+   })
+    return res.render('index',{tasks:todos});
+       }
+
+    // filter by date in descending
+    if(req.body.filters=="dateDesc"){
+    todos = await Tasks.findAll({
+    order: [
+                  ['DueDate','DESC'],
+              ]
+          })
+     return res.render('index',{tasks:todos});
+       }
+
+     // filter by priority high to low
+     if(req.body.filters=="priority"){
+     todos = await Tasks.findAll({
+     order: [
+                   ['Priority','ASC'],
+               ]
+           })
+     return res.render('index',{tasks:todos});
+       }
+
+    // filter status wise 
+     if(req.body.filters=="status"){
+     todos = await Tasks.findAll({
+     order: [
+                  ['Status','ASC'],
+              ]
+          })
+    return res.render('index',{tasks:todos});
+       }
+       todos=await Tasks.findAll();
+     res.render('index',{tasks:todos});
+    });
 
 route.get('/:id', async(req,res) => {
     if(isNaN(Number(req.params.id))){
@@ -70,20 +109,40 @@ route.patch('/:id', async(req,res) => {
     res.redirect('/todos')
 })
 
+route.route('/:id/notes')
+    .get(async (req, res) => {
+        const todo = await Tasks.findByPk(req.params.id);
+        if (isNaN(parseInt(req.params.id))) {
+            return res.status(400).send({error: 'todo id must be an integer'});
+        }
+ 
+        if (!todo) {
+            return res.status(404).send({error:'No todo found with id = ' + req.params.id});
+        }
+        
+        // Get All notes related to this todo
+        const notes = await Notes.findAll({
+            attributes : ['description'],
+            where : {taskId : { [Op.eq] : req.params.id}}
+        });
+ 
+ 
+        res.render('notes',{todo:todo, notes:notes});
+    })
+    .post(async (req, res) => {
+        let todo = await Tasks.findByPk(req.params.id);
+        if (!todo) {
+            return res.status(404).send({error:'No todo found'});
+        }
+        let note=new Notes({
+            description:req.body.description,
+            taskId:req.params.id
+        })
+ 
+        await note.save();
+        res.redirect('/todos');
+    });
 
-// route.get('/:id/notes', async(req,res) => {
-//     const tasknotes = await Tasks.findByPk(req.params.id)
-//     res.render('index',{tasknotes})
-// })
-
-// route.post('/:id/notes', async(req,res) => {
-//     const taskNotes = await Tasks.create({
-//         Notes:req.body.Notes
-//     })
-
-//     await taskNotes.save()
-//     res.redirect('/todos')
-// })
 
 
 module.exports = route
