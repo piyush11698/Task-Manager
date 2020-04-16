@@ -1,6 +1,7 @@
 const express = require('express')
 const {db} = require('./db')
 const methodOverride = require('method-override')
+const port=process.env.PORT||3000
 // const {Tasks} = require('./db')
 const todoRoute = require('./routes/todos')
 
@@ -28,7 +29,7 @@ db.sync()
     //     ])
     // })
     .then(() => {
-        app.listen(3456)
+        app.listen(port)
     })
     .catch((err) => {
         console.log(err)
