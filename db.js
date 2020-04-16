@@ -17,9 +17,8 @@ const Tasks = db.define('todo' , {
     Description:{
         type: Sequelize.STRING(100)
     },
-    DueDate: {
+    DueDate:{
         type: Sequelize.DATE,
-        allowNull: false
     },
     Status: {
         type: Sequelize.STRING,

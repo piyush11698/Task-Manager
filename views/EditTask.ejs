@@ -30,9 +30,9 @@
                         data-success-class="u-has-success" ><%=task.Description%></textarea>
                     </div>
 
-                    <div class="form-group">
+                    <div class="js-form-message form-group">
                         <label for="duedate">Due Date</label>
-                        <input type="text" class="form-control" id="duedate" name="duedate" value="<%=task.DueDate.toLocaleDateString()%>" >
+                        <input type="text" class="form-control" name="duedate" value="<%=task.DueDate.toLocaleDateString()%>" >
                     </div>
                     
                     <% if (task.Status=="Complete"){%>  
